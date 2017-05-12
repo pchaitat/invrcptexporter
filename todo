@@ -1,0 +1,11 @@
+todo
+
+- how to minimize list of packages when running 'pip list' under
+  virtualenv?  right now, there are a lot of unrelated packages coming
+  from the option, '--system-site-packages', of virtulenv
+
+- how to run the program without displaying libreoffice instance on the
+  monitor?
+
+  ('https://documenthacker.files.wordpress.com/2013/07/writing_',
+   'documents-_for_software_engineers_v0002.pdf')
