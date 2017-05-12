@@ -9,7 +9,7 @@ def export_invoice_nowt_to_pdf(model: uno.pyuno, list_row: int,
   export invoice with no withholding tax into pdf file
 
   parameters
-    - model is spreadsheet file
+    - model: the spreadsheet file
   """
 
   # select the sheet to be printed
