@@ -44,5 +44,5 @@ INSTALL
       ```
 
     configure settings as you need inside this rc file, the most
-    important one is SCRIPT_PATH which is the absolute path to 'macro'
+    important one is SCRIPT_PATH which is the absolute path to 'source'
     directory
