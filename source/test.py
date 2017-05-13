@@ -7,7 +7,6 @@ import invrcpt
 import glob
 import os
 import shutil
-import socket
 import subprocess
 import time
 import unittest
