@@ -18,7 +18,8 @@ class TestExportToPdf(unittest.TestCase):
     BASE_DIR = os.environ['SCRIPT_PATH'] + '/'
 
     # create a libre calc file (from the sample file)
-    self.invoice_list_file_path = BASE_DIR + 'test.d/test.ods'
+    self.dir_for_tmp_files_path = BASE_DIR + 'test.d/'
+    self.invoice_list_file_path = self.dir_for_tmp_files_path + 'test.ods'
     shutil.copy2(BASE_DIR + 'sample_invoice_list.ods',
       self.invoice_list_file_path)
 
@@ -36,8 +37,9 @@ class TestExportToPdf(unittest.TestCase):
     self.model.close(True)
     # delete the libre calc test files
     os.remove(self.invoice_list_file_path)
-    pdf_file_list = glob.glob(os.environ['SCRIPT_PATH'] +
-      '/test.d/*.pdf')
+
+    # delete all pdf test files
+    pdf_file_list = glob.glob(self.dir_for_tmp_files_path + '*.pdf')
     for f in pdf_file_list:
       os.remove(f)
 
@@ -60,7 +62,7 @@ class TestExportToPdf(unittest.TestCase):
 
   def test_can_export_invoice_no_withholding_tax_into_pdf(self):
     list_row = 2 # specific the row in worksheet 'list'
-    pdf_file_path = os.environ['SCRIPT_PATH'] + '/test.d/invoice_no_wt.pdf'
+    pdf_file_path = self.dir_for_tmp_files_path + 'invoice_no_wt.pdf'
 
     # set which invoice to be generated
     # inv-nowt stands for INVoice - NO Withholding Tax
