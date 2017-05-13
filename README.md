@@ -58,7 +58,7 @@ INSTALL
       ```
 
     I have tried a few other alternatives such as extractText() from
-    PyPDF2a, it doesn't work for many cases
+    PyPDF2, it doesn't work for many cases
 
   - configure `~/.invrcptexporterrc`:
 
