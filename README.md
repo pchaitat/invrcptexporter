@@ -71,3 +71,9 @@ libreoffice \
 
     adjust settings in this rc file, the most important one is
     SCRIPT_PATH which is the absolute path to 'source' directory
+
+  - run the test:
+
+      ```
+      $ /your/project/path/source/test.sh
+      ```
