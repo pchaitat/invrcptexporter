@@ -1,11 +1,23 @@
 # invrcptexporter
-a very simple tool to export invoice and receipt prepared with libreoffice calc into pdf file
 
-This program exports invoice and receipt in PDF format.
+a tool to export invoice and receipt from libreoffice calc into pdf file
 
 virtualenv has to be created with option `--system-site-packages` as it
 needs to use system site-packages which has uno module installed by
-`$ sudo apt-get install python3-uno`, on Ubuntu.
+`$ sudo apt-get install python3-uno`, on Ubuntu.  (Unfortunately, uno
+module is not available from pip.)
+
+The code is based on Christopher5106's tutorial (many thanks to him):
+
+  ('http://christopher5106.github.io/office/2015/12/06/openoffice-',
+   'libreoffice-automate-your-office-tasks-with-python-macros.html')
+
+## How it works
+
+- we open LibreOffice with socket open
+- we use Python to send commands to LibreOffice through the socket (you
+  should use iptables to block incoming connection on the specified TCP
+  port for security reason)
 
 To open LibreOffice with socket open, use the command line below:
 
@@ -34,7 +46,9 @@ INSTALL
 
   - install required packages from pip:
 
-    TO_BE_CONTINUED
+      ```
+      $ pip install -r requirement.txt
+      ```
 
   - configure `~/.invrcptexporterrc`:
 
@@ -43,6 +57,5 @@ INSTALL
       $ cp /your/project/path/source/invrcptexporterrc .invrcptexporterrc
       ```
 
-    configure settings as you need inside this rc file, the most
-    important one is SCRIPT_PATH which is the absolute path to 'source'
-    directory
+    adjust settings in this rc file, the most important one is
+    SCRIPT_PATH which is the absolute path to 'source' directory
