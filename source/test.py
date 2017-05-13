@@ -95,6 +95,25 @@ class TestExportToPdf(unittest.TestCase):
     self.assertIn('441,000.00', extracted_text)
     self.assertIn('No.: 963', extracted_text)
 
+  def test_can_set_exported_invoice_pdf_file_with_correct_name(self):
+    """
+    wt stands for Withholding Tax
+    """
+
+    list_row = 2 # specify the row in worksheet 'list'
+
+    invoice_filename = exporter.get_exported_invoice_pdf_filename(
+      model=self.model, list_row=list_row)
+
+    self.assertEqual(invoice_filename, 'invoice-963.pdf')
+
+    list_row = 5
+
+    invoice_filename = exporter.get_exported_invoice_pdf_filename(
+      model=self.model, list_row=list_row)
+
+    self.assertEqual(invoice_filename, 'invoice-966.pdf')
+
     self.fail('Finish the test!')
 
 if __name__ == '__main__':
