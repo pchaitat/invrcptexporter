@@ -86,6 +86,13 @@ class TestExportToPdf(unittest.TestCase):
 
     # test if the pdf contains expected texts
     extracted_text = self.extract_text(pdf_file_path)
+    self.assertIn('Ms. Test Testing' , extracted_text)
+    self.assertIn('17/1 Testing Road, Testing Circle, Bangkok, 10100',
+      extracted_text)
+    self.assertIn('8. Apr. 2017', extracted_text)
+    self.assertIn('KVM Based VirtualHosting Training and Tools Development',
+      extracted_text)
+    self.assertIn('441,000.00', extracted_text)
     self.assertIn('No.: 963', extracted_text)
 
     self.fail('Finish the test!')
