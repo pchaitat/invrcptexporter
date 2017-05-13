@@ -3,6 +3,13 @@
 import uno
 from com.sun.star.beans import PropertyValue
 
+def get_exported_invoice_pdf_filename(model: uno.pyuno, list_row: int):
+  # get invoice number
+  list_sheet = model.Sheets.getByName('list')
+  invoice_number = list_sheet.getCellRangeByName('b' + str(list_row)).Value
+
+  return 'invoice-' + ("%.10g" % invoice_number) + '.pdf'
+
 def export_invoice_nowt_to_pdf(model: uno.pyuno, list_row: int,
   dest: 'path_to_pdf_file'):
   """
