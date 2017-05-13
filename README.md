@@ -9,8 +9,10 @@ module is not available from pip.)
 
 The code is based on Christopher5106's tutorial (many thanks to him):
 
+  ```
   ('http://christopher5106.github.io/office/2015/12/06/openoffice-',
    'libreoffice-automate-your-office-tasks-with-python-macros.html')
+  ```
 
 ## How it works
 
