@@ -61,7 +61,7 @@ class TestExportToPdf(unittest.TestCase):
     return subprocess.getoutput('pdftotext ' + pdf_file_path + ' -')
 
   def test_can_export_invoice_no_withholding_tax_into_pdf(self):
-    list_row = 2 # specific the row in worksheet 'list'
+    list_row = 2 # specify the row in worksheet 'list'
     pdf_file_path = self.dir_for_tmp_files_path + 'invoice_no_wt.pdf'
 
     # set which invoice to be generated
