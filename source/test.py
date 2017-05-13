@@ -60,6 +60,10 @@ class TestExportToPdf(unittest.TestCase):
   def extract_text(self, pdf_file_path: str) -> 'text':
     return subprocess.getoutput('pdftotext ' + pdf_file_path + ' -')
 
+  def assert_tuple_of_str_in(self, str_tuple: tuple, text_to_check: str):
+    for s in str_tuple:
+      self.assertIn(s, text_to_check)
+
   def test_can_export_invoice_no_withholding_tax_into_pdf(self):
     list_row = 2 # specify the row in worksheet 'list'
     pdf_file_path = self.dir_for_tmp_files_path + 'invoice_no_wt.pdf'
@@ -86,14 +90,14 @@ class TestExportToPdf(unittest.TestCase):
 
     # test if the pdf contains expected texts
     extracted_text = self.extract_text(pdf_file_path)
-    self.assertIn('Ms. Test Testing' , extracted_text)
-    self.assertIn('17/1 Testing Road, Testing Circle, Bangkok, 10100',
-      extracted_text)
-    self.assertIn('8. Apr. 2017', extracted_text)
-    self.assertIn('KVM Based VirtualHosting Training and Tools Development',
-      extracted_text)
-    self.assertIn('441,000.00', extracted_text)
-    self.assertIn('No.: 963', extracted_text)
+
+    self.assert_tuple_of_str_in((
+      'Ms. Test Testing',
+      '17/1 Testing Road, Testing Circle, Bangkok, 10100',
+      '8. Apr. 2017',
+      'KVM Based VirtualHosting Training and Tools Development',
+      '441,000.00',
+      'No.: 963'), extracted_text)
 
   def test_can_set_exported_invoice_pdf_file_with_correct_name(self):
     """
@@ -113,6 +117,65 @@ class TestExportToPdf(unittest.TestCase):
       model=self.model, list_row=list_row)
 
     self.assertEqual(invoice_filename, 'invoice-966.pdf')
+
+  def test_can_export_multiple_invoice_no_wt_into_pdf(self):
+    """
+    wt stands for Withholding Tax
+    """
+
+    # prepare data
+    list_rows = (2, 3, 4) # specify the rows in worksheet 'list'
+    exported_pdf_dir = self.dir_for_tmp_files_path
+
+    # export!
+    exporter.export_multiple_invoice_nowt_to_pdf(model=self.model,
+      list_rows=list_rows, dest=exported_pdf_dir)
+
+    # test
+
+    # test if the pdf files exists
+    self.assertTrue(os.path.isfile(exported_pdf_dir + 'invoice-963.pdf'))
+    self.assertTrue(os.path.isfile(exported_pdf_dir + 'invoice-964.pdf'))
+    self.assertTrue(os.path.isfile(exported_pdf_dir + 'invoice-965.pdf'))
+
+    # test that each pdf file has 1 page
+    with open(exported_pdf_dir + 'invoice-963.pdf', 'rb') as pdf_file:
+      the_pdf_file = PdfFileReader(pdf_file)
+      self.assertEqual(the_pdf_file.getNumPages(), 1)
+    with open(exported_pdf_dir + 'invoice-964.pdf', 'rb') as pdf_file:
+      the_pdf_file = PdfFileReader(pdf_file)
+      self.assertEqual(the_pdf_file.getNumPages(), 1)
+    with open(exported_pdf_dir + 'invoice-965.pdf', 'rb') as pdf_file:
+      the_pdf_file = PdfFileReader(pdf_file)
+      self.assertEqual(the_pdf_file.getNumPages(), 1)
+
+    # test if each pdf file contains expected texts
+    extracted_text = self.extract_text(exported_pdf_dir + 'invoice-963.pdf')
+    self.assert_tuple_of_str_in((
+      'Ms. Test Testing',
+      '17/1 Testing Road, Testing Circle, Bangkok, 10100',
+      '8. Apr. 2017',
+      'KVM Based VirtualHosting Training and Tools Development',
+      '441,000.00',
+      'No.: 963'), extracted_text)
+
+    extracted_text = self.extract_text(exported_pdf_dir + 'invoice-964.pdf')
+    self.assert_tuple_of_str_in((
+      'Mr. Testa Testo',
+      '17/1 Testing Road, Testing Sqaure, Bangkok, 10100',
+      '8. Apr. 2017',
+      'Emperor + uWSGI system development',
+      '16,000.00',
+      'No.: 964'), extracted_text)
+
+    extracted_text = self.extract_text(exported_pdf_dir + 'invoice-965.pdf')
+    self.assert_tuple_of_str_in((
+      'Ms. Testest Threst',
+      '17/1 Testing Road, Testing Triangle, Bangkok, 10100',
+      '8. Apr. 2017',
+      'Banner graphics design',
+      '6,000.00',
+      'No.: 965'), extracted_text)
 
     self.fail('Finish the test!')
 
