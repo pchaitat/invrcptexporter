@@ -50,6 +50,16 @@ INSTALL
       $ pip install -r requirement.txt
       ```
 
+  - install poppler-utils from apt as we have to use pdftotext in our
+    tests:
+
+      ```
+      $ sudo apt-get install poppler-utils
+      ```
+
+    I have tried a few other alternatives such as extractText() from
+    PyPDF2a, it doesn't work for many cases
+
   - configure `~/.invrcptexporterrc`:
 
       ```

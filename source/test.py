@@ -56,11 +56,15 @@ class TestExportToPdf(unittest.TestCase):
 
     time.sleep(2)
 
-  def test_can_export_invoice_into_pdf(self):
-    list_row = 2
+  def extract_text(self, pdf_file_path: str) -> 'text':
+    return subprocess.getoutput('pdftotext ' + pdf_file_path + ' -')
+
+  def test_can_export_invoice_no_withholding_tax_into_pdf(self):
+    list_row = 2 # specific the row in worksheet 'list'
     pdf_file_path = os.environ['SCRIPT_PATH'] + '/test.d/invoice_no_wt.pdf'
 
-    # select which invoice to be generated
+    # set which invoice to be generated
+    # inv-nowt stands for INVoice - NO Withholding Tax
     inv_nowt_sheet = self.model.Sheets.getByName('inv-nowt')
     list_row_cell = inv_nowt_sheet.getCellRangeByName('h1')
     list_row_cell.Value = list_row
@@ -80,6 +84,9 @@ class TestExportToPdf(unittest.TestCase):
       self.assertEqual(the_pdf_file.getNumPages(), 1)
 
     # test if the pdf contains expected texts
+    extracted_text = self.extract_text(pdf_file_path)
+    self.assertIn('No.: 963', extracted_text)
+
     self.fail('Finish the test!')
 
 if __name__ == '__main__':
