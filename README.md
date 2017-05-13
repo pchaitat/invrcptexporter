@@ -28,7 +28,7 @@ libreoffice \
   --accept="socket,host=localhost,port=2002;urp;StarOffice.ServiceManager"
 ```
 
-INSTALL
+## INSTALL
 
   - On Ubuntu 14.04
 
