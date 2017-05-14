@@ -10,25 +10,18 @@ def get_exported_invoice_pdf_filename(model: uno.pyuno, list_row: int):
 
   return 'invoice-' + ("%.10g" % invoice_number) + '.pdf'
 
-def export_invoice_nowt_to_pdf(model: uno.pyuno, list_row: int,
-  dest: 'path_to_pdf_file'):
-  """
-  export invoice with no withholding tax into pdf file
-
-  parameters
-    - model: the spreadsheet file
+def export_active_sheet_to_pdf(model: uno.pyuno, dest: 'path_to_pdf_file'):
+  """notes: assuming the area of the active sheet to be printed is
+  'a1:h30'
   """
 
-  # select the sheet to be printed
-  inv_nowt_sheet = model.Sheets.getByName('inv-nowt')
-  model.getCurrentController().setActiveSheet(inv_nowt_sheet)
-  inv_nowt_sheet.getCellRangeByName('h1').Value = list_row
+  active_sheet = model.getCurrentController().getActiveSheet()
 
   # have to select the area to be printed
   fdata = []
   fdata1 = PropertyValue()
   fdata1.Name = 'Selection'
-  oCellRange = inv_nowt_sheet.getCellRangeByName('a1:h30')
+  oCellRange = active_sheet.getCellRangeByName('a1:h30')
   fdata1.Value = oCellRange
   fdata.append(fdata1)
 
@@ -44,12 +37,27 @@ def export_invoice_nowt_to_pdf(model: uno.pyuno, list_row: int,
 
   model.storeToURL('file:///' + dest, tuple(args))
 
+def export_invoice_nowt_to_pdf(model: uno.pyuno, list_row: int,
+  dest: 'path_to_pdf_file'):
+  """export invoice with no withholding tax into pdf file
+
+  keyword arguments:
+    model -- the spreadsheet file
+  """
+
+  # select the sheet to be printed
+  inv_nowt_sheet = model.Sheets.getByName('inv-nowt')
+  model.getCurrentController().setActiveSheet(inv_nowt_sheet)
+  inv_nowt_sheet.getCellRangeByName('h1').Value = list_row
+
+  export_active_sheet_to_pdf(model, dest)
+
 def export_multiple_invoice_nowt_to_pdf(model: uno.pyuno,
   list_rows: tuple, dest: 'exported_pdf_dir'):
   """
   keyword arguments:
     model     -- the spreadsheet file
-    list_rows -- tuple of rows in list worksheet
+    list_rows -- tuple of rows in list worksheet, e.g. (2, 3, 5, 6)
     dest      -- directory to export pdf files into
   """
 
