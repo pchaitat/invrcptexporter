@@ -22,6 +22,7 @@ def export_invoice_nowt_to_pdf(model: uno.pyuno, list_row: int,
   # select the sheet to be printed
   inv_nowt_sheet = model.Sheets.getByName('inv-nowt')
   model.getCurrentController().setActiveSheet(inv_nowt_sheet)
+  inv_nowt_sheet.getCellRangeByName('h1').Value = list_row
 
   # have to select the area to be printed
   fdata = []
@@ -42,3 +43,18 @@ def export_invoice_nowt_to_pdf(model: uno.pyuno, list_row: int,
   args.append(arg2)
 
   model.storeToURL('file:///' + dest, tuple(args))
+
+def export_multiple_invoice_nowt_to_pdf(model: uno.pyuno,
+  list_rows: tuple, dest: 'exported_pdf_dir'):
+  """
+  keyword arguments:
+    model     -- the spreadsheet file
+    list_rows -- tuple of rows in list worksheet
+    dest      -- directory to export pdf files into
+  """
+
+  for list_row in list_rows:
+    export_invoice_nowt_to_pdf(
+      model=model,
+      list_row=list_row,
+      dest=dest + get_exported_invoice_pdf_filename(model, list_row))

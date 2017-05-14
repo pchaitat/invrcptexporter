@@ -68,12 +68,6 @@ class TestExportToPdf(unittest.TestCase):
     list_row = 2 # specify the row in worksheet 'list'
     pdf_file_path = self.dir_for_tmp_files_path + 'invoice_no_wt.pdf'
 
-    # set which invoice to be generated
-    # inv-nowt stands for INVoice - NO Withholding Tax
-    inv_nowt_sheet = self.model.Sheets.getByName('inv-nowt')
-    list_row_cell = inv_nowt_sheet.getCellRangeByName('h1')
-    list_row_cell.Value = list_row
-
     # export it using our export function
     exporter.export_invoice_nowt_to_pdf(model=self.model,
       list_row=list_row, dest=pdf_file_path)
