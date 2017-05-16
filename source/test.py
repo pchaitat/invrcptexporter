@@ -46,6 +46,24 @@ class TestExportToPdf(unittest.TestCase):
 
     time.sleep(2)
 
+  def get_data_tuple_from_list_sheet(self, list_row: int):
+    """
+    go to 'list' worksheet, go to row, 'list_row', get data from each
+    column into tuple and return it
+    """
+
+    list_sheet = self.ods.model.Sheets.getByName('list')
+    invoice_date = list_sheet.getCellRangeByName('a'+str(list_row)).String
+    invoice_id = list_sheet.getCellRangeByName('b'+str(list_row)).String
+    price = list_sheet.getCellRangeByName('c'+str(list_row)).String[1:]
+    customer_info_0 = list_sheet.getCellRangeByName('i'+str(list_row)).String
+    customer_info_1 = list_sheet.getCellRangeByName('j'+str(list_row)).String
+    customer_info_2 = list_sheet.getCellRangeByName('k'+str(list_row)).String
+    project_name = list_sheet.getCellRangeByName('m'+str(list_row)).String
+
+    return (invoice_date, invoice_id, price, customer_info_0,
+      customer_info_1, customer_info_2, project_name)
+
   def extract_text(self, pdf_file_path: str) -> 'text':
     return subprocess.getoutput('pdftotext ' + pdf_file_path + ' -')
 
@@ -92,13 +110,9 @@ class TestExportToPdf(unittest.TestCase):
     # test if the pdf contains expected texts
     extracted_text = self.extract_text(pdf_file_path)
 
-    self.assert_tuple_of_str_in((
-      'Ms. Test Testing',
-      '17/1 Testing Road, Testing Circle, Bangkok, 10100',
-      '8. Apr. 2017',
-      'KVM Based VirtualHosting Training and Tools Development',
-      '441,000.00',
-      'No.: 963'), extracted_text)
+    self.assert_tuple_of_str_in(
+      self.get_data_tuple_from_list_sheet(list_row),
+      extracted_text)
 
   def test_can_export_multiple_invoice_no_wt_into_pdf(self):
     """
@@ -133,31 +147,19 @@ class TestExportToPdf(unittest.TestCase):
 
     # test if each pdf file contains expected texts
     extracted_text = self.extract_text(exported_pdf_dir + 'invoice-963.pdf')
-    self.assert_tuple_of_str_in((
-      'Ms. Test Testing',
-      '17/1 Testing Road, Testing Circle, Bangkok, 10100',
-      '8. Apr. 2017',
-      'KVM Based VirtualHosting Training and Tools Development',
-      '441,000.00',
-      'No.: 963'), extracted_text)
+    self.assert_tuple_of_str_in(
+      self.get_data_tuple_from_list_sheet(list_rows[0]),
+      extracted_text)
 
     extracted_text = self.extract_text(exported_pdf_dir + 'invoice-964.pdf')
-    self.assert_tuple_of_str_in((
-      'Mr. Testa Testo',
-      '17/1 Testing Road, Testing Sqaure, Bangkok, 10100',
-      '8. Apr. 2017',
-      'Emperor + uWSGI system development',
-      '16,000.00',
-      'No.: 964'), extracted_text)
+    self.assert_tuple_of_str_in(
+      self.get_data_tuple_from_list_sheet(list_rows[1]),
+      extracted_text)
 
     extracted_text = self.extract_text(exported_pdf_dir + 'invoice-965.pdf')
-    self.assert_tuple_of_str_in((
-      'Ms. Testest Threst',
-      '17/1 Testing Road, Testing Triangle, Bangkok, 10100',
-      '8. Apr. 2017',
-      'Banner graphics design',
-      '6,000.00',
-      'No.: 965'), extracted_text)
+    self.assert_tuple_of_str_in(
+      self.get_data_tuple_from_list_sheet(list_rows[2]),
+      extracted_text)
 
     self.fail('Finish the test!')
 
