@@ -130,41 +130,22 @@ class TestExportToPdf(unittest.TestCase):
 
     # test
 
-    file_name_0 = self.ods.get_exported_invoice_pdf_filename(list_rows[0])
-    file_name_1 = self.ods.get_exported_invoice_pdf_filename(list_rows[1])
-    file_name_2 = self.ods.get_exported_invoice_pdf_filename(list_rows[2])
+    for list_row in list_rows:
+      filename = self.ods.get_exported_invoice_pdf_filename(list_row)
 
-    # test if the pdf files exists
-    self.assertTrue(os.path.isfile(exported_pdf_dir+file_name_0))
-    self.assertTrue(os.path.isfile(exported_pdf_dir+file_name_1))
-    self.assertTrue(os.path.isfile(exported_pdf_dir+file_name_2))
+      # test if the pdf files exists
+      self.assertTrue(os.path.isfile(exported_pdf_dir+filename))
 
-    # test that each pdf file has 1 page
-    with open(exported_pdf_dir + file_name_0, 'rb') as pdf_file:
-      the_pdf_file = PdfFileReader(pdf_file)
-      self.assertEqual(the_pdf_file.getNumPages(), 1)
-    with open(exported_pdf_dir + file_name_1, 'rb') as pdf_file:
-      the_pdf_file = PdfFileReader(pdf_file)
-      self.assertEqual(the_pdf_file.getNumPages(), 1)
-    with open(exported_pdf_dir + file_name_2, 'rb') as pdf_file:
-      the_pdf_file = PdfFileReader(pdf_file)
-      self.assertEqual(the_pdf_file.getNumPages(), 1)
+      # test that each pdf file has 1 page
+      with open(exported_pdf_dir + filename, 'rb') as pdf_file:
+        the_pdf_file = PdfFileReader(pdf_file)
+        self.assertEqual(the_pdf_file.getNumPages(), 1)
 
-    # test if each pdf file contains expected texts
-    extracted_text = self.extract_text(exported_pdf_dir + file_name_0)
-    self.assert_tuple_of_str_in(
-      self.get_data_tuple_from_list_sheet(list_rows[0]),
-      extracted_text)
-
-    extracted_text = self.extract_text(exported_pdf_dir + file_name_1)
-    self.assert_tuple_of_str_in(
-      self.get_data_tuple_from_list_sheet(list_rows[1]),
-      extracted_text)
-
-    extracted_text = self.extract_text(exported_pdf_dir + file_name_2)
-    self.assert_tuple_of_str_in(
-      self.get_data_tuple_from_list_sheet(list_rows[2]),
-      extracted_text)
+      # test if each pdf file contains expected texts
+      extracted_text = self.extract_text(exported_pdf_dir+filename)
+      self.assert_tuple_of_str_in(
+        self.get_data_tuple_from_list_sheet(list_row),
+        extracted_text)
 
     self.fail('Finish the test!')
 
