@@ -6,6 +6,7 @@ from PyPDF2 import PdfFileReader
 import invrcpt
 import glob
 import os
+import re
 import shutil
 import subprocess
 import time
@@ -78,7 +79,8 @@ class TestExportToPdf(unittest.TestCase):
     return row_dict
 
   def extract_text(self, pdf_file_path: str) -> 'text':
-    return subprocess.getoutput('pdftotext ' + pdf_file_path + ' -')
+    return re.sub('\\n', ' ',
+      subprocess.getoutput('pdftotext ' + pdf_file_path + ' -'))
 
   def assert_tuple_of_str_in(self, str_tuple: tuple, text_to_check: str):
     for s in str_tuple:
