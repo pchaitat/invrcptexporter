@@ -54,18 +54,6 @@ class Ods:
 
     self.model.storeToURL('file:///' + dest, tuple(args))
 
-  def export_invoice_nowt_to_pdf(self, list_row: int,
-    dest: 'path_to_pdf_file'):
-    """export invoice with no withholding tax into pdf file
-    """
-
-    # select the sheet to be printed
-    inv_nowt_sheet = self.model.Sheets.getByName('inv-nowt')
-    self.model.getCurrentController().setActiveSheet(inv_nowt_sheet)
-    inv_nowt_sheet.getCellRangeByName('h1').Value = list_row
-
-    self.export_active_sheet_to_pdf(dest)
-
   def export_multiple_invoice_nowt_to_pdf(self, list_rows: tuple,
     dest: 'exported_pdf_dir'):
     """
@@ -74,7 +62,11 @@ class Ods:
       dest      -- directory to export pdf files into
     """
 
+    # select the sheet to be printed
+    inv_nowt_sheet = self.model.Sheets.getByName('inv-nowt')
+    self.model.getCurrentController().setActiveSheet(inv_nowt_sheet)
+
     for list_row in list_rows:
-      self.export_invoice_nowt_to_pdf(
-        list_row=list_row,
-        dest=dest + self.get_exported_invoice_pdf_filename(list_row))
+      inv_nowt_sheet.getCellRangeByName('h1').Value = list_row
+      self.export_active_sheet_to_pdf(''.join((dest,
+        self.get_exported_invoice_pdf_filename(list_row))))

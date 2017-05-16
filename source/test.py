@@ -90,31 +90,6 @@ class TestExportToPdf(unittest.TestCase):
 
     self.assertEqual(invoice_filename, 'invoice-966.pdf')
 
-  def test_can_export_invoice_no_withholding_tax_into_pdf(self):
-    list_row = 2 # specify the row in worksheet 'list'
-    pdf_file_path = ''.join((self.dir_for_tmp_files_path,
-      self.ods.get_exported_invoice_pdf_filename(list_row)))
-
-    # export it using our export function
-    self.ods.export_invoice_nowt_to_pdf(list_row=list_row, dest=pdf_file_path)
-
-    # test that the generated pdf matches what we expect
-
-    # test if the pdf file exists
-    self.assertTrue(os.path.isfile(pdf_file_path))
-
-    # test that the pdf file has 1 page
-    with open(pdf_file_path, 'rb') as pdf_file:
-      the_pdf_file = PdfFileReader(pdf_file)
-      self.assertEqual(the_pdf_file.getNumPages(), 1)
-
-    # test if the pdf contains expected texts
-    extracted_text = self.extract_text(pdf_file_path)
-
-    self.assert_tuple_of_str_in(
-      self.get_data_tuple_from_list_sheet(list_row),
-      extracted_text)
-
   def test_can_export_multiple_invoice_no_wt_into_pdf(self):
     """
     wt stands for Withholding Tax
