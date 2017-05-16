@@ -53,6 +53,25 @@ class TestExportToPdf(unittest.TestCase):
     for s in str_tuple:
       self.assertIn(s, text_to_check)
 
+  def test_can_set_exported_invoice_pdf_file_with_correct_name(self):
+    """
+    wt stands for Withholding Tax
+    """
+
+    list_row = 2 # specify the row in worksheet 'list'
+
+    invoice_filename = self.ods.get_exported_invoice_pdf_filename(
+      list_row=list_row)
+
+    self.assertEqual(invoice_filename, 'invoice-963.pdf')
+
+    list_row = 5
+
+    invoice_filename = self.ods.get_exported_invoice_pdf_filename(
+      list_row=list_row)
+
+    self.assertEqual(invoice_filename, 'invoice-966.pdf')
+
   def test_can_export_invoice_no_withholding_tax_into_pdf(self):
     list_row = 2 # specify the row in worksheet 'list'
     pdf_file_path = self.dir_for_tmp_files_path + 'invoice_no_wt.pdf'
@@ -80,25 +99,6 @@ class TestExportToPdf(unittest.TestCase):
       'KVM Based VirtualHosting Training and Tools Development',
       '441,000.00',
       'No.: 963'), extracted_text)
-
-  def test_can_set_exported_invoice_pdf_file_with_correct_name(self):
-    """
-    wt stands for Withholding Tax
-    """
-
-    list_row = 2 # specify the row in worksheet 'list'
-
-    invoice_filename = self.ods.get_exported_invoice_pdf_filename(
-      list_row=list_row)
-
-    self.assertEqual(invoice_filename, 'invoice-963.pdf')
-
-    list_row = 5
-
-    invoice_filename = self.ods.get_exported_invoice_pdf_filename(
-      list_row=list_row)
-
-    self.assertEqual(invoice_filename, 'invoice-966.pdf')
 
   def test_can_export_multiple_invoice_no_wt_into_pdf(self):
     """
