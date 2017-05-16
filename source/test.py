@@ -46,23 +46,36 @@ class TestExportToPdf(unittest.TestCase):
 
     time.sleep(2)
 
-  def get_data_tuple_from_list_sheet(self, list_row: int):
+  def get_row_dict_from_list_sheet(self, list_row: int):
     """
     go to 'list' worksheet, go to row, 'list_row', get data from each
     column into tuple and return it
     """
 
     list_sheet = self.ods.model.Sheets.getByName('list')
-    invoice_date = list_sheet.getCellRangeByName('a'+str(list_row)).String
-    invoice_id = list_sheet.getCellRangeByName('b'+str(list_row)).String
-    price = list_sheet.getCellRangeByName('c'+str(list_row)).String[1:]
-    customer_info_0 = list_sheet.getCellRangeByName('i'+str(list_row)).String
-    customer_info_1 = list_sheet.getCellRangeByName('j'+str(list_row)).String
-    customer_info_2 = list_sheet.getCellRangeByName('k'+str(list_row)).String
-    project_name = list_sheet.getCellRangeByName('m'+str(list_row)).String
+    row_dict = {}
+    row_dict['invoice_date'] = list_sheet.getCellRangeByName(
+      'a'+str(list_row)).String
+    row_dict['invoice_id'] = list_sheet.getCellRangeByName(
+      'b'+str(list_row)).String
+    row_dict['price'] = list_sheet.getCellRangeByName(
+      'c'+str(list_row)).String[1:]
+    row_dict['wt'] = list_sheet.getCellRangeByName(
+      'e'+str(list_row)).String[1:]
+    row_dict['receipt_date'] = list_sheet.getCellRangeByName(
+      'g'+str(list_row)).String
+    row_dict['receipt_id'] = list_sheet.getCellRangeByName(
+      'h'+str(list_row)).String
+    row_dict['customer_info_0'] = list_sheet.getCellRangeByName(
+      'i'+str(list_row)).String
+    row_dict['customer_info_1'] = list_sheet.getCellRangeByName(
+      'j'+str(list_row)).String
+    row_dict['customer_info_2'] = list_sheet.getCellRangeByName(
+      'k'+str(list_row)).String
+    row_dict['project_name'] = list_sheet.getCellRangeByName(
+      'm'+str(list_row)).String
 
-    return (invoice_date, invoice_id, price, customer_info_0,
-      customer_info_1, customer_info_2, project_name)
+    return row_dict
 
   def extract_text(self, pdf_file_path: str) -> 'text':
     return subprocess.getoutput('pdftotext ' + pdf_file_path + ' -')
@@ -118,9 +131,18 @@ class TestExportToPdf(unittest.TestCase):
 
       # test if each pdf file contains expected texts
       extracted_text = self.extract_text(exported_pdf_dir+filename)
-      self.assert_tuple_of_str_in(
-        self.get_data_tuple_from_list_sheet(list_row),
-        extracted_text)
+
+      expected_text_dict = self.get_row_dict_from_list_sheet(list_row)
+      expected_text_tuple = (
+        expected_text_dict['invoice_date'],
+        expected_text_dict['invoice_id'],
+        expected_text_dict['price'],
+        expected_text_dict['customer_info_0'],
+        expected_text_dict['customer_info_1'],
+        expected_text_dict['customer_info_2'],
+        expected_text_dict['project_name'],)
+
+      self.assert_tuple_of_str_in(expected_text_tuple, extracted_text)
 
     self.fail('Finish the test!')
 
