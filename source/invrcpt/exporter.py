@@ -9,6 +9,7 @@ import uno
 INV_NOWT_FORM  = 'inv-nowt'
 INV_WT3_FORM   = 'inv-wt3'
 RCPT_NOWT_FORM = 'rcpt-nowt'
+RCPT_WT3_FORM  = 'rcpt-wt3'
 
 class Ods:
 
