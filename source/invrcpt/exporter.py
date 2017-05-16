@@ -2,24 +2,37 @@
 
 import uno
 from com.sun.star.beans import PropertyValue
+import time
+import uno
 
 class Ods:
 
-  @staticmethod
-  def get_exported_invoice_pdf_filename(model: uno.pyuno, list_row: int):
+  def __init__(self):
+
+    localContext = uno.getComponentContext()
+    resolver = localContext.ServiceManager.createInstanceWithContext(
+      "com.sun.star.bridge.UnoUrlResolver", localContext)
+    context = resolver.resolve(
+      "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext")
+    desktop = context.ServiceManager.createInstanceWithContext(
+      "com.sun.star.frame.Desktop", context)
+    self.model = desktop.getCurrentComponent()
+
+    time.sleep(2)
+
+  def get_exported_invoice_pdf_filename(self, list_row: int):
     # get invoice number
-    list_sheet = model.Sheets.getByName('list')
+    list_sheet = self.model.Sheets.getByName('list')
     invoice_number = list_sheet.getCellRangeByName('b' + str(list_row)).Value
 
     return 'invoice-' + ("%.10g" % invoice_number) + '.pdf'
 
-  @staticmethod
-  def export_active_sheet_to_pdf(model: uno.pyuno, dest: 'path_to_pdf_file'):
+  def export_active_sheet_to_pdf(self, dest: 'path_to_pdf_file'):
     """notes: assuming the area of the active sheet to be printed is
     'a1:h30'
     """
 
-    active_sheet = model.getCurrentController().getActiveSheet()
+    active_sheet = self.model.getCurrentController().getActiveSheet()
 
     # have to select the area to be printed
     fdata = []
@@ -39,36 +52,29 @@ class Ods:
     args.append(arg1)
     args.append(arg2)
 
-    model.storeToURL('file:///' + dest, tuple(args))
+    self.model.storeToURL('file:///' + dest, tuple(args))
 
-  @staticmethod
-  def export_invoice_nowt_to_pdf(model: uno.pyuno, list_row: int,
+  def export_invoice_nowt_to_pdf(self, list_row: int,
     dest: 'path_to_pdf_file'):
     """export invoice with no withholding tax into pdf file
-
-    keyword arguments:
-      model -- the spreadsheet file
     """
 
     # select the sheet to be printed
-    inv_nowt_sheet = model.Sheets.getByName('inv-nowt')
-    model.getCurrentController().setActiveSheet(inv_nowt_sheet)
+    inv_nowt_sheet = self.model.Sheets.getByName('inv-nowt')
+    self.model.getCurrentController().setActiveSheet(inv_nowt_sheet)
     inv_nowt_sheet.getCellRangeByName('h1').Value = list_row
 
-    Ods.export_active_sheet_to_pdf(model, dest)
+    self.export_active_sheet_to_pdf(dest)
 
-  @staticmethod
-  def export_multiple_invoice_nowt_to_pdf(model: uno.pyuno,
-    list_rows: tuple, dest: 'exported_pdf_dir'):
+  def export_multiple_invoice_nowt_to_pdf(self, list_rows: tuple,
+    dest: 'exported_pdf_dir'):
     """
     keyword arguments:
-      model     -- the spreadsheet file
       list_rows -- tuple of rows in list worksheet, e.g. (2, 3, 5, 6)
       dest      -- directory to export pdf files into
     """
 
     for list_row in list_rows:
-      Ods.export_invoice_nowt_to_pdf(
-        model=model,
+      self.export_invoice_nowt_to_pdf(
         list_row=list_row,
-        dest=dest + Ods.get_exported_invoice_pdf_filename(model, list_row))
+        dest=dest + self.get_exported_invoice_pdf_filename(list_row))

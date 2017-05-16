@@ -13,13 +13,15 @@ todo
 - remove hard-coded text assertion from test, get text from worksheet
   'list' automatically instead
 
-- refactoring: convert functions into class:
-    - (done) move all functions into a class and make them all to be
-      static method
-    - add a constructor by using initialize_uno from test.py and modify
-      the test to call class's method instead of static method
-
 done
 
 - remove the zero on the 3rd row of the customer's name and address
   section
+
+- refactoring: convert functions into class:
+    - (done) move all functions into a class and make them all to be
+      static method
+    - (done) add a constructor by using initialize_uno from test.py and
+      modify the test to call class's method instead of static method
+
+
