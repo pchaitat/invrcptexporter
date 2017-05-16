@@ -77,3 +77,8 @@ libreoffice \
       ```
       $ /your/project/path/source/test.sh
       ```
+
+    notes: test.sh is a hack (you can see details from comments inside
+    test.sh ), each time you run it, you have to manually close (exit or
+    ctrl+q) the opened libreoffice ui so that the test will continue to
+    run
