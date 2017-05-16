@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from invrcpt.exporter import Ods
+from invrcpt.exporter import Ods, INV_NOWT_FORM, INV_WT3_FORM
 from PyPDF2 import PdfFileReader
 
 import invrcpt
@@ -113,8 +113,8 @@ class TestExportToPdf(unittest.TestCase):
     exported_pdf_dir = self.dir_for_tmp_files_path
 
     # export!
-    self.ods.export_multiple_invoice_nowt_to_pdf(list_rows=list_rows,
-      dest=exported_pdf_dir)
+    self.ods.export_multiple_common_form_to_pdf(form=INV_NOWT_FORM,
+      list_rows=list_rows, dest=exported_pdf_dir)
 
     # test
 

@@ -5,6 +5,10 @@ from com.sun.star.beans import PropertyValue
 import time
 import uno
 
+# common form name list
+INV_NOWT_FORM = 'inv-nowt'
+INV_WT3_FORM  = 'inv-wt3'
+
 class Ods:
 
   def __init__(self):
@@ -54,16 +58,20 @@ class Ods:
 
     self.model.storeToURL('file:///' + dest, tuple(args))
 
-  def export_multiple_invoice_nowt_to_pdf(self, list_rows: tuple,
-    dest: 'exported_pdf_dir'):
+  def export_multiple_common_form_to_pdf(self, form: 'form_name',
+    list_rows: tuple, dest: 'exported_pdf_dir'):
     """
     keyword arguments:
+      form_name -- the name of the form which is the same name as the
+                   name of the worksheet to be printed which is defined
+                   above, see "common form name list" at the top of this
+                   file (INV_NOWT_FORM, INV_WT3_FORM, etc)
       list_rows -- tuple of rows in list worksheet, e.g. (2, 3, 5, 6)
       dest      -- directory to export pdf files into
     """
 
     # select the sheet to be printed
-    inv_nowt_sheet = self.model.Sheets.getByName('inv-nowt')
+    inv_nowt_sheet = self.model.Sheets.getByName(form)
     self.model.getCurrentController().setActiveSheet(inv_nowt_sheet)
 
     for list_row in list_rows:
