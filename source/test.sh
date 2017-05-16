@@ -10,6 +10,9 @@
 #
 # But if we run a dummy libreoffice first before test.py, the
 # LibreOffice processes disappear after all the tests end.
+#
+# However, each time you run test.sh, you have to manually exit
+# libreoffice before the test can continue.
 
 if [[ -e ~/.invrcptexporterrc ]]
 then
