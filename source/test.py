@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from invrcpt import exporter
 from invrcpt.exporter import Ods
 from PyPDF2 import PdfFileReader
 
@@ -36,6 +35,7 @@ class TestExportToPdf(unittest.TestCase):
 
   def tearDown(self):
     self.ods.model.close(True)
+
     # delete the libre calc test files
     os.remove(self.invoice_list_file_path)
 
