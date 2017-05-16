@@ -49,7 +49,7 @@ libreoffice \
   - install required packages from pip:
 
       ```
-      $ pip install -r requirement.txt
+      $ pip install -r requirements.txt
       ```
 
   - install poppler-utils from apt as we have to use pdftotext in our
