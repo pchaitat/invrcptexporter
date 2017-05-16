@@ -14,8 +14,8 @@ todo
   'list' automatically instead
 
 - refactoring: convert functions into class:
-    - move all functions into a class and make them all to be static
-      method
+    - (done) move all functions into a class and make them all to be
+      static method
     - add a constructor by using initialize_uno from test.py and modify
       the test to call class's method instead of static method
 
