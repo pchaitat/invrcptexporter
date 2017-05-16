@@ -82,3 +82,7 @@ libreoffice \
     test.sh ), each time you run it, you have to manually close (exit or
     ctrl+q) the opened libreoffice ui so that the test will continue to
     run
+
+  - the program is currently shipped as a library only, please see
+    sample codes for how to use it from:
+    `/source/sample-code/invrcptexporter/`
