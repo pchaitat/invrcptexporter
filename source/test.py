@@ -92,7 +92,8 @@ class TestExportToPdf(unittest.TestCase):
 
   def test_can_export_invoice_no_withholding_tax_into_pdf(self):
     list_row = 2 # specify the row in worksheet 'list'
-    pdf_file_path = self.dir_for_tmp_files_path + 'invoice_no_wt.pdf'
+    pdf_file_path = ''.join((self.dir_for_tmp_files_path,
+      self.ods.get_exported_invoice_pdf_filename(list_row)))
 
     # export it using our export function
     self.ods.export_invoice_nowt_to_pdf(list_row=list_row, dest=pdf_file_path)
@@ -129,34 +130,38 @@ class TestExportToPdf(unittest.TestCase):
 
     # test
 
+    file_name_0 = self.ods.get_exported_invoice_pdf_filename(list_rows[0])
+    file_name_1 = self.ods.get_exported_invoice_pdf_filename(list_rows[1])
+    file_name_2 = self.ods.get_exported_invoice_pdf_filename(list_rows[2])
+
     # test if the pdf files exists
-    self.assertTrue(os.path.isfile(exported_pdf_dir + 'invoice-963.pdf'))
-    self.assertTrue(os.path.isfile(exported_pdf_dir + 'invoice-964.pdf'))
-    self.assertTrue(os.path.isfile(exported_pdf_dir + 'invoice-965.pdf'))
+    self.assertTrue(os.path.isfile(exported_pdf_dir+file_name_0))
+    self.assertTrue(os.path.isfile(exported_pdf_dir+file_name_1))
+    self.assertTrue(os.path.isfile(exported_pdf_dir+file_name_2))
 
     # test that each pdf file has 1 page
-    with open(exported_pdf_dir + 'invoice-963.pdf', 'rb') as pdf_file:
+    with open(exported_pdf_dir + file_name_0, 'rb') as pdf_file:
       the_pdf_file = PdfFileReader(pdf_file)
       self.assertEqual(the_pdf_file.getNumPages(), 1)
-    with open(exported_pdf_dir + 'invoice-964.pdf', 'rb') as pdf_file:
+    with open(exported_pdf_dir + file_name_1, 'rb') as pdf_file:
       the_pdf_file = PdfFileReader(pdf_file)
       self.assertEqual(the_pdf_file.getNumPages(), 1)
-    with open(exported_pdf_dir + 'invoice-965.pdf', 'rb') as pdf_file:
+    with open(exported_pdf_dir + file_name_2, 'rb') as pdf_file:
       the_pdf_file = PdfFileReader(pdf_file)
       self.assertEqual(the_pdf_file.getNumPages(), 1)
 
     # test if each pdf file contains expected texts
-    extracted_text = self.extract_text(exported_pdf_dir + 'invoice-963.pdf')
+    extracted_text = self.extract_text(exported_pdf_dir + file_name_0)
     self.assert_tuple_of_str_in(
       self.get_data_tuple_from_list_sheet(list_rows[0]),
       extracted_text)
 
-    extracted_text = self.extract_text(exported_pdf_dir + 'invoice-964.pdf')
+    extracted_text = self.extract_text(exported_pdf_dir + file_name_1)
     self.assert_tuple_of_str_in(
       self.get_data_tuple_from_list_sheet(list_rows[1]),
       extracted_text)
 
-    extracted_text = self.extract_text(exported_pdf_dir + 'invoice-965.pdf')
+    extracted_text = self.extract_text(exported_pdf_dir + file_name_2)
     self.assert_tuple_of_str_in(
       self.get_data_tuple_from_list_sheet(list_rows[2]),
       extracted_text)
