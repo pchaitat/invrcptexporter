@@ -6,8 +6,9 @@ import time
 import uno
 
 # common form name list
-INV_NOWT_FORM = 'inv-nowt'
-INV_WT3_FORM  = 'inv-wt3'
+INV_NOWT_FORM  = 'inv-nowt'
+INV_WT3_FORM   = 'inv-wt3'
+RCPT_NOWT_FORM = 'rcpt-nowt'
 
 class Ods:
 
@@ -30,6 +31,13 @@ class Ods:
     invoice_number = list_sheet.getCellRangeByName('b' + str(list_row)).Value
 
     return 'invoice-' + ("%.10g" % invoice_number) + '.pdf'
+
+  def get_exported_receipt_pdf_filename(self, list_row: int):
+    # get receipt number
+    list_sheet = self.model.Sheets.getByName('list')
+    receipt_number = list_sheet.getCellRangeByName('h' + str(list_row)).Value
+
+    return 'receipt-' + ("%.10g" % receipt_number) + '.pdf'
 
   def export_active_sheet_to_pdf(self, dest: 'path_to_pdf_file'):
     """notes: assuming the area of the active sheet to be printed is
@@ -71,10 +79,18 @@ class Ods:
     """
 
     # select the sheet to be printed
-    inv_nowt_sheet = self.model.Sheets.getByName(form)
-    self.model.getCurrentController().setActiveSheet(inv_nowt_sheet)
+    the_sheet = self.model.Sheets.getByName(form)
+    self.model.getCurrentController().setActiveSheet(the_sheet)
 
     for list_row in list_rows:
-      inv_nowt_sheet.getCellRangeByName('h1').Value = list_row
+      the_sheet.getCellRangeByName('h1').Value = list_row
+
+      if form in (INV_NOWT_FORM, INV_WT3_FORM):
+        exported_pdf_filename = \
+          self.get_exported_invoice_pdf_filename(list_row)
+      else:
+        exported_pdf_filename = \
+          self.get_exported_receipt_pdf_filename(list_row)
+
       self.export_active_sheet_to_pdf(''.join((dest,
-        self.get_exported_invoice_pdf_filename(list_row))))
+        exported_pdf_filename)))

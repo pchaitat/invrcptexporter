@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from invrcpt.exporter import Ods, INV_NOWT_FORM, INV_WT3_FORM
+from invrcpt.exporter import Ods, INV_NOWT_FORM, INV_WT3_FORM, \
+  RCPT_NOWT_FORM
 from PyPDF2 import PdfFileReader
 
 import invrcpt
@@ -105,6 +106,25 @@ class TestExportToPdf(unittest.TestCase):
 
     self.assertEqual(invoice_filename, 'invoice-966.pdf')
 
+  def test_can_set_exported_receipt_pdf_file_with_correct_name(self):
+    """
+    wt stands for Withholding Tax
+    """
+
+    list_row = 2 # specify the row in worksheet 'list'
+
+    receipt_filename = self.ods.get_exported_receipt_pdf_filename(
+      list_row=list_row)
+
+    self.assertEqual(receipt_filename, 'receipt-800.pdf')
+
+    list_row = 5
+
+    receipt_filename = self.ods.get_exported_receipt_pdf_filename(
+      list_row=list_row)
+
+    self.assertEqual(receipt_filename, 'receipt-925.pdf')
+
   def test_can_export_multiple_invoice_no_wt_into_pdf(self):
     """
     wt stands for Withholding Tax
@@ -188,6 +208,49 @@ class TestExportToPdf(unittest.TestCase):
 
       self.assert_tuple_of_str_in(expected_text_tuple, extracted_text)
 
+  def test_can_export_multiple_receipt_no_wt_into_pdf(self):
+    """
+    wt stands for Withholding Tax
+    """
+
+    # prepare data
+    list_rows = (2, 3, 4) # specify the rows in worksheet 'list'
+    exported_pdf_dir = self.dir_for_tmp_files_path
+
+    # export!
+    self.ods.export_multiple_common_form_to_pdf(form=RCPT_NOWT_FORM,
+      list_rows=list_rows, dest=exported_pdf_dir)
+
+    # test
+
+    for list_row in list_rows:
+      filename = self.ods.get_exported_receipt_pdf_filename(list_row)
+
+      # test if the pdf files exists
+      self.assertTrue(os.path.isfile(exported_pdf_dir+filename))
+
+      # test that each pdf file has 1 page
+      with open(exported_pdf_dir + filename, 'rb') as pdf_file:
+        the_pdf_file = PdfFileReader(pdf_file)
+        self.assertEqual(the_pdf_file.getNumPages(), 1)
+
+      # test if each pdf file contains expected texts
+      extracted_text = self.extract_text(exported_pdf_dir+filename)
+
+      expected_text_dict = self.get_row_dict_from_list_sheet(list_row)
+      expected_text_tuple = (
+        expected_text_dict['invoice_id'],
+        expected_text_dict['price'],
+        expected_text_dict['receipt_date'],
+        expected_text_dict['receipt_id'],
+        expected_text_dict['customer_info_0'],
+        expected_text_dict['customer_info_1'],
+        expected_text_dict['customer_info_2'],
+        expected_text_dict['project_name'],)
+
+      self.assert_tuple_of_str_in(expected_text_tuple, extracted_text)
+
     self.fail('Finish the test!')
+
 if __name__ == '__main__':
   unittest.main()
