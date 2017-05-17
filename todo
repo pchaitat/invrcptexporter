@@ -10,9 +10,6 @@ todo
   ('https://documenthacker.files.wordpress.com/2013/07/writing_',
    'documents-_for_software_engineers_v0002.pdf')
 
-- split install section in the readme file to have 1 version for testing
-  and another one for user
-
 done
 
 - remove the zero on the 3rd row of the customer's name and address
@@ -26,3 +23,6 @@ done
 
 - remove hard-coded text assertion from test, get text from worksheet
   'list' automatically instead
+
+- split install section in the readme file to have 1 version for testing
+  and another one for user
