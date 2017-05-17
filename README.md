@@ -85,7 +85,19 @@ libreoffice \
 
 ## INSTALL for USER
 
-TO_BE_CONTINUED
+  - install python3-uno as a system-wide package as this package is not
+    available via pip:
+
+      ```
+      $ sudo apt-get install python3-uno
+      ```
+
+  - install invrcptexporter from pip:
+
+      ```
+      $ pip3 install invrcptexporter
+      ```
+
   - the program is currently shipped as a library only, please see
     sample codes for how to use it from:
     `/source/sample-code/invrcptexporter/`
