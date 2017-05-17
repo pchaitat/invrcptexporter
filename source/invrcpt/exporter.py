@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 
+# we have to import uno before PropertyValue for some reason I don't
+# know yet, the result is that we can't sort the import statements
+# as usual
+import uno
+
 from com.sun.star.beans import PropertyValue
 import time
-import uno
 
 # common form name list
 INV_NOWT_FORM  = 'inv-nowt'
