@@ -28,7 +28,7 @@ libreoffice \
   --accept="socket,host=localhost,port=2002;urp;StarOffice.ServiceManager"
 ```
 
-## INSTALL
+## INSTALL for TESTING
 
   - On Ubuntu 14.04
 
@@ -49,7 +49,7 @@ libreoffice \
   - install required packages from pip:
 
       ```
-      $ pip install -r requirements.txt
+      $ pip install -r requirements-test.txt
       ```
 
   - install poppler-utils from apt as we have to use pdftotext in our
@@ -83,6 +83,9 @@ libreoffice \
     ctrl+q) the opened libreoffice ui so that the test will continue to
     run
 
+## INSTALL for USER
+
+TO_BE_CONTINUED
   - the program is currently shipped as a library only, please see
     sample codes for how to use it from:
     `/source/sample-code/invrcptexporter/`
