@@ -98,6 +98,8 @@ libreoffice \
       $ pip3 install invrcptexporter
       ```
 
+  - use /sample_invoice_list.ods as the template
+
   - the program is currently shipped as a library only, please see
     sample codes for how to use it from:
     `/source/sample-code/invrcptexporter/`
