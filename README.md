@@ -9,10 +9,7 @@ module is not available from pip.)
 
 The code is based on Christopher5106's tutorial (many thanks to him):
 
-  ```
-  ('http://christopher5106.github.io/office/2015/12/06/openoffice-',
-   'libreoffice-automate-your-office-tasks-with-python-macros.html')
-  ```
+  http://christopher5106.github.io/office/2015/12/06/openoffice-libreoffice-automate-your-office-tasks-with-python-macros.html
 
 ## How it works
 
@@ -66,16 +63,16 @@ libreoffice \
 
       ```
       $ cd ~
-      $ cp /your/project/path/source/invrcptexporterrc .invrcptexporterrc
+      $ cp /your/project/path/invrcptexporterrc .invrcptexporterrc
       ```
 
     adjust settings in this rc file, the most important one is
-    SCRIPT_PATH which is the absolute path to 'source' directory
+    SCRIPT_PATH which is the absolute path to your project directory
 
   - run the test:
 
       ```
-      $ /your/project/path/source/test.sh
+      $ /your/project/path/test.sh
       ```
 
     notes: test.sh is a hack (you can see details from comments inside
@@ -102,4 +99,4 @@ libreoffice \
 
   - the program is currently shipped as a library only, please see
     sample codes for how to use it from:
-    `/source/sample-code/invrcptexporter/`
+    `/sample-code/invrcptexporter/`
